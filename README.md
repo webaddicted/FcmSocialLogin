@@ -113,7 +113,7 @@ response get in
                 TwitterAuth.twitterLogin(this, this, getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret));
             }
 
-** On Activity result is same for all **
+**On Activity result is same for all**
 
-** Logout steps is also same for all **
+**Logout steps is also same for all**
 
