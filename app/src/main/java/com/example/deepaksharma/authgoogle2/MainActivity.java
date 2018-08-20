@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnLoginListener {
 
     public void facebookLogin(View v) {
         FacebookAuth.fbLogin(MainActivity.this, this);
+
     }
 
     public void twitterLogin(View v) {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnLoginListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (SocialLogin.getloginType()) {
                 case GOOGLE:
                     GoogleAuth.activityResult(this, requestCode, resultCode, data);
@@ -66,9 +67,9 @@ public class MainActivity extends AppCompatActivity implements OnLoginListener {
                     TwitterAuth.activityResult(requestCode, resultCode, data);
                     break;
             }
-//        } else {
-//            Log.d(TAG, "onActivityResult: login Failed");
-//        }
+        } else {
+            Log.d(TAG, "onActivityResult: login Failed");
+        }
     }
 
     @Override
