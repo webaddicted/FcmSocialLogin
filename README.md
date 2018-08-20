@@ -12,26 +12,26 @@ Android Project with helper library for login through facebook, twitter and goog
 ![demo](https://github.com/webaddicted/SocialLogin/blob/master/screenshot/facebook.png)
 ![demo](https://github.com/webaddicted/SocialLogin/blob/master/screenshot/home.png)
 
-Step 1 : integrate firebase in project.
+**Step 1 : integrate firebase in project.**
 
-Step 2 : Enable GOOGLE FACEBOOK, TWITTER authentication.
+**Step 2 : Enable GOOGLE FACEBOOK, TWITTER authentication.**
 
-Step 3 : create project in developer facebook & app.twitter.com site.
+**Step 3 : create project in developer facebook & app.twitter.com site.**
 
-Step 4 : get securit key  an fill in firebase auth deshboard and also add key in project.
+**Step 4 : get securit key  an fill in firebase auth deshboard and also add key in project.**
 
-Step 5 : initalize social login library in application class .
+**Step 5 : initalize social login library in application class .**
 
         SocialLogin.init(this);
 
-Step 6 : add fcm & social login library dependency in gradle file..
+**Step 6 : add fcm & social login library dependency in gradle file..**
 
         dependencies {
             implementation 'com.google.firebase:firebase-auth:16.0.1'
             implementation 'com.github.webaddicted:SocialLogin:1.0.0'
         }
 
-Step 7 : Add it in your root build.gradle at the end of repositories:
+**Step 7 : Add it in your root build.gradle at the end of repositories:**
 
         allprojects {
             repositories {
@@ -43,13 +43,13 @@ Step 7 : Add it in your root build.gradle at the end of repositories:
 Step 7 GOOGLE STEPS -
 ---------------------
 
-On button click
+**On button click**
 
          public void onGoogle(View v) {
                 GoogleAuth.googleLogin(this, this, getString(R.string.default_web_client_id));
             }
 
-In Activity Result
+**In Activity Result**
 
             @Override
             public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -74,7 +74,7 @@ In Activity Result
 Implements OnLoginListener
 --------------------------
 
-response get in
+**response get in**
 
           @Override
             public void onSuccess(LoginResponse loginResponse) {

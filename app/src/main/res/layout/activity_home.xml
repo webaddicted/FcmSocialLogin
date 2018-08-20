@@ -44,35 +44,5 @@
             />
 
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onCheckPermission"
-            android:text="Check Permission" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onFormValidation"
-            android:text="Form Validation" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onChangeLocation"
-            android:text="Location" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onSetPreference"
-            android:text="Set Preferance" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onGetPreference"
-            android:text="Get Preferance" />
-
     </LinearLayout>
 </ScrollView>

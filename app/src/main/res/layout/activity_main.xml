@@ -35,11 +35,6 @@
                 android:layout_height="wrap_content"
                 android:onClick="twitterLogin"
                 android:text="Twitter Login" />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="phoneAuth"
-                android:text="Phone Auth" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
