@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="first_name_min_length">2</integer>
+    <integer name="first_name_max_length">20</integer>
+    <integer name="middle_name_min_length">2</integer>
+    <integer name="middle_name_max_length">20</integer>
+    <integer name="last_name_min_length">2</integer>
+    <integer name="last_name_max_length">20</integer>
+    <integer name="full_name_min_length">5</integer>
+    <integer name="full_name_max_length">40</integer>
+    <integer name="username_min_length">2</integer>
+    <integer name="username_max_length">40</integer>
+    <integer name="email_min_length">5</integer>
+    <integer name="email_max_length">40</integer>
+    <integer name="phone_number_min_length">10</integer>
+    <integer name="phone_number_max_length">13</integer>
+    <integer name="password_min_length">8</integer>
+    <integer name="password_max_length">15</integer>
+</resources>
