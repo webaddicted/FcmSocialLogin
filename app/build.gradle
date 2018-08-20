@@ -50,9 +50,6 @@ dependencies {
     implementation project(':sociallogin')
     //    FireBase
     implementation 'com.google.firebase:firebase-auth:16.0.1'
-    // GPS location
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-
 //    implementation 'com.gitlab.webaddicted:SocialLogin:v1.0.3'
 
 }
