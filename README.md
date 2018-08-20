@@ -24,7 +24,7 @@ Step 6 : add fcm & social login library dependency in gradle file..
 
         dependencies {
             implementation 'com.google.firebase:firebase-auth:16.0.1'
-            implementation 'com.gitlab.webaddicted:SocialLogin:v1.0.3'
+            implementation 'com.github.webaddicted:SocialLogin:1.0.0'
         }
 
 Step 7 : Add it in your root build.gradle at the end of repositories:
