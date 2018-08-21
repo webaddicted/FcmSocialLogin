@@ -12,6 +12,9 @@ Android Project with helper library for login through facebook, twitter and goog
 ![demo](https://github.com/webaddicted/SocialLogin/blob/master/screenshot/facebook.png)
 ![demo](https://github.com/webaddicted/SocialLogin/blob/master/screenshot/home.png)
 
+Steps Follow : 
+--------------
+
 **Step 1 : integrate firebase in project.**
 
 **Step 2 : Enable GOOGLE FACEBOOK, TWITTER authentication.**
