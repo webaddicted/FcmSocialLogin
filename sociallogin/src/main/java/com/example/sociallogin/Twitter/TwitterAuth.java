@@ -109,12 +109,37 @@ public class TwitterAuth {
         );
         mLoginResponse.onSuccess(loginResponse);
     }
-
-    public static boolean logOut() {
-        CookieSyncManager.createInstance(SocialLogin.getInstance());
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeSessionCookie();
-        TwitterCore.getInstance().getSessionManager().clearActiveSession();
-        return true;
+public static boolean logOut() {
+        TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        if (twitterSession != null) {
+            clearTwitterCookies(mActivity);
+            Twitter.getSessionManager().clearActiveSession();
+            Twitter.logOut();
+            return true;
+        }else
+            return false;
     }
+
+
+    private static void clearTwitterCookies(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } else {
+            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+            cookieSyncMngr.startSync();
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();
+            cookieManager.removeSessionCookie();
+            cookieSyncMngr.stopSync();
+            cookieSyncMngr.sync();
+        }
+    }
+//     public static boolean logOut() {
+//         CookieSyncManager.createInstance(SocialLogin.getInstance());
+//         CookieManager cookieManager = CookieManager.getInstance();
+//         cookieManager.removeSessionCookie();
+//         TwitterCore.getInstance().getSessionManager().clearActiveSession();
+//         return true;
+//     }
 }
