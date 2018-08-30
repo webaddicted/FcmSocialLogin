@@ -67,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
             } else if (chekLoginType.equals(LoginType.FACEBOOK)) {
                 FacebookAuth.logOut();
             } else if (chekLoginType.equals(LoginType.TWITTER)) {
-                TwitterAuth.logOut();
+                TwitterAuth.logOut(this);
             }
             PreferenceClass.removeValue("loginType");
             startActivity(new Intent(this, MainActivity.class));

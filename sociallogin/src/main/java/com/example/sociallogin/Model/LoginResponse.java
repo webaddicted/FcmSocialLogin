@@ -6,14 +6,16 @@ public class LoginResponse {
     private String userEmailId;
     private String userMobileno;
     private String userImage;
+    private String dob;
     private String userProvider;
 
-    public LoginResponse(String userid, String userName, String userEmailId, String userMobileno, String userImage, String userProvider) {
+    public LoginResponse(String userid, String userName, String userEmailId, String userMobileno, String userImage, String dob, String userProvider) {
         this.userid = userid;
         this.userName = userName;
         this.userEmailId = userEmailId;
         this.userMobileno = userMobileno;
         this.userImage = userImage;
+        this.dob = dob;
         this.userProvider = userProvider;
     }
 
@@ -55,6 +57,14 @@ public class LoginResponse {
 
     public void setUserImage(String userImage) {
         this.userImage = userImage;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 
     public String getUserProvider() {

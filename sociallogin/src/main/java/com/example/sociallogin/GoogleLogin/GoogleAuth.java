@@ -116,7 +116,7 @@ public class GoogleAuth {
                 firebaseUser.getDisplayName(),
                 strEmailId,
                 strPhoneNo,
-                firebaseUser.getPhotoUrl().toString(),
+                firebaseUser.getPhotoUrl().toString(),"",
                 firebaseUser.getProviderId()
         );
         mLoginResponse.onSuccess(loginResponse);

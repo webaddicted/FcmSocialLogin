@@ -1,7 +1,9 @@
 package com.example.sociallogin.Twitter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -33,7 +35,6 @@ public class TwitterAuth {
     FirebaseAuth mAuth = SocialLogin.getFirebaseAuth();
     private static TwitterAuthClient mTwitterAuthClient;
     private static OnLoginListener mLoginResponse;
-
     /**
      * @param activity                referance of activity
      * @param loginResponse           is describe user login status
@@ -104,17 +105,17 @@ public class TwitterAuth {
                 firebaseUser.getDisplayName(),
                 strEmailId,
                 strPhoneNo,
-                firebaseUser.getPhotoUrl().toString(),
+                firebaseUser.getPhotoUrl().toString(),"",
                 firebaseUser.getProviderId()
         );
         mLoginResponse.onSuccess(loginResponse);
     }
-public static boolean logOut() {
+public static boolean logOut(Activity mActivity) {
         TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (twitterSession != null) {
             clearTwitterCookies(mActivity);
-            Twitter.getSessionManager().clearActiveSession();
-            Twitter.logOut();
+//            Twitter.getSessionManager().clearActiveSession();
+//            Twitter.logOut();
             return true;
         }else
             return false;
