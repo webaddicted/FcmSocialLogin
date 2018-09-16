@@ -1,7 +1,6 @@
-package com.example.sociallogin.GoogleLogin;
+package com.example.sociallogin.auth;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
@@ -22,18 +21,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import static android.app.Activity.RESULT_OK;
-
 /**
  * Created by deepaksharma on 4/6/18.
  */
 
 public class GoogleAuth {
+    private static String TAG = GoogleAuth.class.getSimpleName();
     public static final int RC_SIGN_IN = 234;
     private static GoogleSignInClient mGoogleSignInClient;
     private static @NonNull
     FirebaseAuth mAuth = SocialLogin.getFirebaseAuth();
-    private static String TAG = GoogleAuth.class.getSimpleName();
     private static OnLoginListener mLoginResponse;
 
     /**
@@ -54,7 +51,7 @@ public class GoogleAuth {
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 activity.startActivityForResult(signInIntent, RC_SIGN_IN);
             } else {
-                getUserInfo(mAuth.getCurrentUser());
+                getUserInfo(mAuth.getCurrentUser(), GoogleSignIn.getLastSignedInAccount(activity));
             }
         }
     }
@@ -65,7 +62,7 @@ public class GoogleAuth {
      * @param resultCode  is RESULT_OK
      * @param data        have google signin information
      */
-    public static void activityResult(@NonNull Activity activity, @NonNull int requestCode, @NonNull int resultCode, @NonNull Intent data) {
+    public static void onActivityResult(@NonNull Activity activity, @NonNull int requestCode, @NonNull int resultCode, @NonNull Intent data) {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -85,15 +82,15 @@ public class GoogleAuth {
      * @param activity referance of activity
      * @param account  is contain all user info.
      */
-    private static void firebaseAuthWithGoogle(@NonNull final Activity activity, @NonNull GoogleSignInAccount account) {
+    private static void firebaseAuthWithGoogle(@NonNull final Activity activity, @NonNull final GoogleSignInAccount account) {
         //getting the auth credential
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        //Now using firebase we are signing in the user here
+        //save usr info on firebase
         mAuth.signInWithCredential(credential).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    getUserInfo(mAuth.getCurrentUser());
+                    getUserInfo(mAuth.getCurrentUser(), account);
                 } else {
                     mLoginResponse.onFailure("SignIn Authentication failed.");
                 }
@@ -103,27 +100,30 @@ public class GoogleAuth {
 
     /**
      * @param firebaseUser is current login user
+     * @param account
      */
-    private static void getUserInfo(@NonNull FirebaseUser firebaseUser) {
-        String strEmailId;
-        String strPhoneNo;
-        if (firebaseUser.getEmail() != null) strEmailId = firebaseUser.getEmail();
-        else strEmailId = firebaseUser.getProviderData().get(0).getEmail();
-
-        if (firebaseUser.getPhoneNumber() != null) strPhoneNo = firebaseUser.getPhoneNumber();
-        else strPhoneNo = firebaseUser.getProviderData().get(0).getPhoneNumber();
-        LoginResponse loginResponse = new LoginResponse(firebaseUser.getUid(),
-                firebaseUser.getDisplayName(),
-                strEmailId,
-                strPhoneNo,
-                firebaseUser.getPhotoUrl().toString(),"",
-                firebaseUser.getProviderId()
-        );
+    private static void getUserInfo(@NonNull FirebaseUser firebaseUser, GoogleSignInAccount account) {
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setUserid(firebaseUser.getUid());
+        loginResponse.setTokenId(account.getIdToken());
+        loginResponse.setUserName(account.getDisplayName());
+        loginResponse.setUserEmailId(account.getEmail());
+        loginResponse.setDob("");
+        loginResponse.setUserImage(account.getPhotoUrl().toString());
+        loginResponse.setProvider(firebaseUser.getProviderId());
         mLoginResponse.onSuccess(loginResponse);
     }
+    public static GoogleSignInClient isLogin(Activity activity) {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(activity, gso);
+        return mGoogleSignInClient;
+    }
 
-    public static void signOut() {
+    public static boolean logOut(Activity activity) {
         FirebaseAuth.getInstance().signOut();
-        mGoogleSignInClient.signOut();
+        isLogin(activity).signOut();
+        return true;
     }
 }

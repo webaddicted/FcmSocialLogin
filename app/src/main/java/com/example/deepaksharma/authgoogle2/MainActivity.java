@@ -7,8 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.sociallogin.Facebook.FacebookAuth;
-import com.example.sociallogin.GoogleLogin.GoogleAuth;
+import com.example.sociallogin.auth.FacebookAuth;
+import com.example.sociallogin.auth.GoogleAuth;
 import com.example.sociallogin.Interface.OnLoginListener;
 import com.example.sociallogin.Model.LoginResponse;
 import com.example.sociallogin.Preference.PreferenceClass;
@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements OnLoginListener {
         if (resultCode == RESULT_OK) {
             switch (SocialLogin.getloginType()) {
                 case GOOGLE:
-                    GoogleAuth.activityResult(this, requestCode, resultCode, data);
+                    GoogleAuth.onActivityResult(this, requestCode, resultCode, data);
                     break;
                 case FACEBOOK:
-                    FacebookAuth.activityResult(requestCode, resultCode, data);
+                    FacebookAuth.onActivityResult(requestCode, resultCode, data);
                     break;
                 case TWITTER:
                     TwitterAuth.activityResult(requestCode, resultCode, data);
@@ -91,6 +91,15 @@ public class MainActivity extends AppCompatActivity implements OnLoginListener {
     public void userInfo(LoginResponse userLogin) {
         Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
         PreferenceClass.setValue("loginType", SocialLogin.getloginType().toString());
+        PreferenceClass.setValue("name", userLogin.getUserName());
+        PreferenceClass.setValue("email", userLogin.getUserEmailId());
+        PreferenceClass.setValue("mobile", userLogin.getUserMobileno());
+        PreferenceClass.setValue("provider", userLogin.getProvider());
+        PreferenceClass.setValue("id", userLogin.getUserid());
+        PreferenceClass.setValue("token", userLogin.getTokenId());
+        PreferenceClass.setValue("image", userLogin.getUserImage());
+        PreferenceClass.setValue("dob", userLogin.getDob());
+
         startActivity(new Intent(this, HomeActivity.class));
         finish();
     }

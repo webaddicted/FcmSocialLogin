@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
@@ -20,6 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -28,6 +30,7 @@ import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.models.User;
 
 public class TwitterAuth {
     private static String TAG = TwitterAuth.class.getSimpleName();
@@ -35,9 +38,10 @@ public class TwitterAuth {
     FirebaseAuth mAuth = SocialLogin.getFirebaseAuth();
     private static TwitterAuthClient mTwitterAuthClient;
     private static OnLoginListener mLoginResponse;
+
     /**
      * @param activity                referance of activity
-     * @param loginResponse           is describe user login status
+     * @param loginResponse           user login listener
      * @param twitter_consumer_key    provided by twitter
      * @param twitter_consumer_secret is also provide by twitter
      */
@@ -81,7 +85,8 @@ public class TwitterAuth {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    getUserInfo(mAuth.getCurrentUser());
+                    requestEmail(task.getResult().getUser(), session.getAuthToken().token);
+//                getUserInfo(mAuth.getCurrentUser());
                 } else {
                     mLoginResponse.onFailure("Twitter Authentication failed " + task.getException());
                     // If sign in fails, display a message to the user.
@@ -90,34 +95,61 @@ public class TwitterAuth {
         });
     }
 
-    /**
-     * @param firebaseUser is current login user
-     */
-    private static void getUserInfo(@NonNull FirebaseUser firebaseUser) {
-        String strEmailId;
-        String strPhoneNo;
-        if (firebaseUser.getEmail() != null) strEmailId = firebaseUser.getEmail();
-        else strEmailId = firebaseUser.getProviderData().get(0).getEmail();
+    private static void requestEmail(final FirebaseUser userResult, String token) {
+        final TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        String profileImage = userResult.getPhotoUrl().toString();
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setUserid(userResult.getUid());
+        loginResponse.setTokenId(token);
+        loginResponse.setUserName(userResult.getDisplayName());
+        loginResponse.setDob("");
+        loginResponse.setUserImage(profileImage);
+        loginResponse.setProvider(userResult.getProviderId());
+        mTwitterAuthClient.requestEmail(twitterSession, new Callback<String>() {
+            @Override
+            public void success(Result<String> emailResult) {
+                String email = emailResult.data;
+                loginResponse.setUserEmailId(email);
+                mLoginResponse.onSuccess(loginResponse);
+            }
 
-        if (firebaseUser.getPhoneNumber() != null) strPhoneNo = firebaseUser.getPhoneNumber();
-        else strPhoneNo = firebaseUser.getProviderData().get(0).getPhoneNumber();
-        LoginResponse loginResponse = new LoginResponse(firebaseUser.getUid(),
-                firebaseUser.getDisplayName(),
-                strEmailId,
-                strPhoneNo,
-                firebaseUser.getPhotoUrl().toString(),"",
-                firebaseUser.getProviderId()
-        );
-        mLoginResponse.onSuccess(loginResponse);
+            @Override
+            public void failure(TwitterException e) {
+                mLoginResponse.onSuccess(loginResponse);
+            }
+        });
     }
-public static boolean logOut(Activity mActivity) {
+
+//    /**
+//     * @param firebaseUser is current login user
+//     */
+//    private static void getUserInfo(@NonNull FirebaseUser firebaseUser) {
+//        String strEmailId;
+//        String strPhoneNo;
+//        if (firebaseUser.getEmail() != null) strEmailId = firebaseUser.getEmail();
+//        else strEmailId = firebaseUser.getProviderData().get(0).getEmail();
+//
+//        if (firebaseUser.getPhoneNumber() != null) strPhoneNo = firebaseUser.getPhoneNumber();
+//        else strPhoneNo = firebaseUser.getProviderData().get(0).getPhoneNumber();
+//        LoginResponse loginResponse = new LoginResponse();
+//        loginResponse.setUserid(firebaseUser.getUid());
+//        loginResponse.setTokenId(firebaseUser.getIdToken(true).toString());
+//        loginResponse.setUserName(firebaseUser.getDisplayName());
+//        loginResponse.setUserEmailId(firebaseUser.getEmail());
+//        loginResponse.setDob("");
+//        loginResponse.setUserImage(firebaseUser.getPhotoUrl().toString());
+//        loginResponse.setProvider(firebaseUser.getProviderId());
+//        mLoginResponse.onSuccess(loginResponse);
+//    }
+
+    public static boolean logOut(Activity mActivity) {
         TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (twitterSession != null) {
             clearTwitterCookies(mActivity);
 //            Twitter.getSessionManager().clearActiveSession();
 //            Twitter.logOut();
             return true;
-        }else
+        } else
             return false;
     }
 

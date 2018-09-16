@@ -2,22 +2,13 @@ package com.example.sociallogin.Model;
 
 public class LoginResponse {
     private String userid;
+    private String tokenId;
     private String userName;
     private String userEmailId;
     private String userMobileno;
     private String userImage;
     private String dob;
-    private String userProvider;
-
-    public LoginResponse(String userid, String userName, String userEmailId, String userMobileno, String userImage, String dob, String userProvider) {
-        this.userid = userid;
-        this.userName = userName;
-        this.userEmailId = userEmailId;
-        this.userMobileno = userMobileno;
-        this.userImage = userImage;
-        this.dob = dob;
-        this.userProvider = userProvider;
-    }
+    private String provider;
 
     public String getUserid() {
         return userid;
@@ -25,6 +16,14 @@ public class LoginResponse {
 
     public void setUserid(String userid) {
         this.userid = userid;
+    }
+
+    public String getTokenId() {
+        return tokenId;
+    }
+
+    public void setTokenId(String tokenId) {
+        this.tokenId = tokenId;
     }
 
     public String getUserName() {
@@ -67,11 +66,11 @@ public class LoginResponse {
         this.dob = dob;
     }
 
-    public String getUserProvider() {
-        return userProvider;
+    public String getProvider() {
+        return provider;
     }
 
-    public void setUserProvider(String userProvider) {
-        this.userProvider = userProvider;
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 }
