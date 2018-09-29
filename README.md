@@ -31,7 +31,7 @@ Steps Follow :
 
         dependencies {
             implementation 'com.google.firebase:firebase-auth:16.0.1'
-            implementation 'com.github.webaddicted:SocialLogin:1.0.0'
+            implementation 'com.github.webaddicted:Fcm_SocialLogin:1.0.1'
         }
 
 **Step 7 : Add it in your root build.gradle at the end of repositories:**
